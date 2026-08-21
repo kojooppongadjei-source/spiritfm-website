@@ -68,13 +68,53 @@
       </div>
     </div>
     <div style="background:var(--navy);border-radius:20px;padding:36px;color:var(--cream);text-align:center;">
-      <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:14px;">Livestream Player</p>
-      <div style="background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.25);border-radius:14px;padding:40px 20px;">
-        <p style="font-size:14px;color:rgba(255,255,255,.6);">Stream player embed goes here<br>(e.g. Icecast / rcast.net player)</p>
-      </div>
+      <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:18px;">Livestream Player</p>
+      <button id="player-btn" style="width:76px;height:76px;border-radius:50%;background:var(--amber);border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:var(--navy);">▶</button>
+      <p id="player-status" style="margin-top:16px;font-size:13.5px;color:rgba(255,255,255,.6);">Tap to listen live</p>
+      <audio id="player-audio" preload="none"></audio>
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  // ▼▼▼ Set the real stream URL here once Spirit FM provides one (ideally https://) ▼▼▼
+  var STREAM_URL = '';
+  // ▲▲▲
+
+  var btn = document.getElementById('player-btn');
+  var status = document.getElementById('player-status');
+  var audio = document.getElementById('player-audio');
+  if (!btn) return;
+
+  if (!STREAM_URL) {
+    status.textContent = 'Stream coming soon';
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'not-allowed';
+    return;
+  }
+
+  var playing = false;
+  btn.addEventListener('click', function () {
+    if (!playing) {
+      if (!audio.src) audio.src = STREAM_URL;
+      status.textContent = 'Connecting…';
+      audio.play().then(function () {
+        playing = true;
+        btn.textContent = '❚❚';
+        status.textContent = 'Live now — 96.6 FM';
+      }).catch(function () {
+        status.textContent = 'Could not connect. Try again.';
+      });
+    } else {
+      audio.pause();
+      playing = false;
+      btn.textContent = '▶';
+      status.textContent = 'Tap to listen live';
+    }
+  });
+})();
+</script>
 
 <section class="section-dark">
   <div class="wrap">
