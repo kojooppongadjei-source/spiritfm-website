@@ -122,6 +122,7 @@ section{padding:88px 0;}
 .section-dark .eyebrow{color:var(--amber);}
 
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
 
 .card{
@@ -191,12 +192,14 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.7);padding:64px 0 32p
 @media (max-width:900px){
   .hero-grid, .grid-2, .contact-grid{grid-template-columns:1fr;}
   .grid-3{grid-template-columns:1fr 1fr;}
+  .grid-4{grid-template-columns:1fr 1fr;}
   .footer-grid{grid-template-columns:1fr 1fr;}
   .nav-links{display:none;}
   .menu-toggle{display:block;}
 }
 @media (max-width:560px){
   .grid-3{grid-template-columns:1fr;}
+  .grid-4{grid-template-columns:1fr;}
   .footer-grid{grid-template-columns:1fr;}
   .hero-stats{grid-template-columns:1fr;gap:10px;}
 }
