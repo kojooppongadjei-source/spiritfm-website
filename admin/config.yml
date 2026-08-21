@@ -1,0 +1,23 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+site_url: https://monumental-tanuki-b9895d.netlify.app
+display_url: https://monumental-tanuki-b9895d.netlify.app
+
+collections:
+  - name: "news"
+    label: "News"
+    folder: "content/news"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Image URL (optional)", name: "image", widget: "string", required: false }
+      - { label: "Summary (shown on News list page)", name: "summary", widget: "text" }
+      - { label: "Body", name: "body", widget: "markdown" }

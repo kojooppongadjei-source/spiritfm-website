@@ -1,0 +1,7 @@
+{
+  "name": "spiritfm-website",
+  "private": true,
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}
