@@ -118,6 +118,7 @@ ${cardsHtml}
   </div>
 </section>
 ${FOOTER}
+<script src="/assets/js/nav.js"></script>
 </body>
 </html>
 `;
@@ -155,6 +156,7 @@ ${NAV('news')}
   </div>
 </section>
 ${FOOTER}
+<script src="/assets/js/nav.js"></script>
 </body>
 </html>
 `;
