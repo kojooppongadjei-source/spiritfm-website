@@ -131,6 +131,7 @@ section{padding:88px 0;}
 }
 .card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(11,11,12,.1);}
 .card img{aspect-ratio:4/3;object-fit:cover;width:100%;}
+.card img.card-img-square{aspect-ratio:1/1;}
 .card-body{padding:20px 22px 24px;}
 .card-body .tag{font-size:12px;font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:.08em;}
 .card-body h3{font-size:19px;margin:8px 0 6px;}
