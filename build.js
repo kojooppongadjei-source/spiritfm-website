@@ -49,7 +49,7 @@ const FOOTER = `
       </div>
       <div>
         <h4>Studio</h4>
-        <p>Kamwokya Media Plaza<br>Kampala, Uganda</p>
+        <p>Media Plaza, 3rd Floor<br>Plot No.78, Kira Road<br>P.O.Box 125432, Kampala - Uganda</p>
       </div>
       <div>
         <h4>Reach Us</h4>
