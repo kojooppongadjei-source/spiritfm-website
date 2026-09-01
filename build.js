@@ -18,7 +18,19 @@ const NAV = (active) => `
     <a href="/#listen" class="nav-cta">▶ Listen Live</a>
     <button class="menu-toggle" aria-label="Menu">☰</button>
   </div>
-</nav>`;
+</nav>
+
+<div id="site-player-bar">
+  <div class="wrap">
+    <button class="spb-btn" data-role="site-play-toggle" aria-label="Play/Pause live stream">▶</button>
+    <div class="spb-info">
+      <span class="spb-title">Spirit FM 96.6</span>
+      <span class="spb-status" data-role="site-play-status">Tap to listen live</span>
+    </div>
+    <span class="spb-live-dot" data-role="site-live-dot"></span>
+  </div>
+  <audio id="site-audio" preload="none"></audio>
+</div>`;
 
 const FOOTER = `
 <footer>
@@ -103,6 +115,7 @@ function buildNewsListing(posts) {
 </head>
 <body>
 ${NAV('news')}
+<main id="page-content">
 <header class="page-header">
   <div class="wrap">
     <div class="eyebrow">News</div>
@@ -117,6 +130,7 @@ ${cardsHtml}
     </div>
   </div>
 </section>
+</main>
 ${FOOTER}
 <script src="/assets/js/nav.js"></script>
 </body>
@@ -140,6 +154,7 @@ function buildNewsPost(p) {
 </head>
 <body>
 ${NAV('news')}
+<main id="page-content">
 <header class="page-header">
   <div class="wrap">
     <div class="eyebrow">${formatDate(p.date)}</div>
@@ -155,6 +170,7 @@ ${NAV('news')}
     <p style="margin-top:40px;"><a href="/news.html" class="btn btn-outline" style="border-color:rgba(11,11,12,.2);color:var(--ink);">← Back to News</a></p>
   </div>
 </section>
+</main>
 ${FOOTER}
 <script src="/assets/js/nav.js"></script>
 </body>

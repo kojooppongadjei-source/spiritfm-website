@@ -24,6 +24,20 @@
   </div>
 </nav>
 
+<div id="site-player-bar">
+  <div class="wrap">
+    <button class="spb-btn" data-role="site-play-toggle" aria-label="Play/Pause live stream">▶</button>
+    <div class="spb-info">
+      <span class="spb-title">Spirit FM 96.6</span>
+      <span class="spb-status" data-role="site-play-status">Tap to listen live</span>
+    </div>
+    <span class="spb-live-dot" data-role="site-live-dot"></span>
+  </div>
+  <audio id="site-audio" preload="none"></audio>
+</div>
+
+<main id="page-content">
+
 <header class="page-header">
   <div class="wrap">
     <div class="eyebrow">Get In Touch</div>
@@ -78,6 +92,8 @@
     </form>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap">

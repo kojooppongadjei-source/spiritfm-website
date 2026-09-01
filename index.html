@@ -24,6 +24,19 @@
   </div>
 </nav>
 
+<div id="site-player-bar">
+  <div class="wrap">
+    <button class="spb-btn" data-role="site-play-toggle" aria-label="Play/Pause live stream">▶</button>
+    <div class="spb-info">
+      <span class="spb-title">Spirit FM 96.6</span>
+      <span class="spb-status" data-role="site-play-status">Tap to listen live</span>
+    </div>
+    <span class="spb-live-dot" data-role="site-live-dot"></span>
+  </div>
+  <audio id="site-audio" preload="none"></audio>
+</div>
+
+<main id="page-content">
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
@@ -69,52 +82,11 @@
     </div>
     <div style="background:var(--navy);border-radius:20px;padding:36px;color:var(--cream);text-align:center;">
       <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:18px;">Livestream Player</p>
-      <button id="player-btn" style="width:76px;height:76px;border-radius:50%;background:var(--amber);border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:var(--navy);">▶</button>
-      <p id="player-status" style="margin-top:16px;font-size:13.5px;color:rgba(255,255,255,.6);">Tap to listen live</p>
-      <audio id="player-audio" preload="none"></audio>
+      <button data-role="site-play-toggle" style="width:76px;height:76px;border-radius:50%;background:var(--amber);border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:var(--navy);">▶</button>
+      <p data-role="site-play-status" style="margin-top:16px;font-size:13.5px;color:rgba(255,255,255,.6);">Tap to listen live</p>
     </div>
   </div>
 </section>
-
-<script>
-(function(){
-  // ▼▼▼ Set the real stream URL here once Spirit FM provides one (ideally https://) ▼▼▼
-  var STREAM_URL = 'https://sunny-radio-server.cloud-ip.cc/radio/spiritfm';
-  // ▲▲▲
-
-  var btn = document.getElementById('player-btn');
-  var status = document.getElementById('player-status');
-  var audio = document.getElementById('player-audio');
-  if (!btn) return;
-
-  if (!STREAM_URL) {
-    status.textContent = 'Stream coming soon';
-    btn.style.opacity = '0.5';
-    btn.style.cursor = 'not-allowed';
-    return;
-  }
-
-  var playing = false;
-  btn.addEventListener('click', function () {
-    if (!playing) {
-      if (!audio.src) audio.src = STREAM_URL;
-      status.textContent = 'Connecting…';
-      audio.play().then(function () {
-        playing = true;
-        btn.textContent = '❚❚';
-        status.textContent = 'Live now — 96.6 FM';
-      }).catch(function () {
-        status.textContent = 'Could not connect. Try again.';
-      });
-    } else {
-      audio.pause();
-      playing = false;
-      btn.textContent = '▶';
-      status.textContent = 'Tap to listen live';
-    }
-  });
-})();
-</script>
 
 <section class="section-dark">
   <div class="wrap">
@@ -175,6 +147,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap">
