@@ -16,7 +16,7 @@ function initMobileMenu() {
 }
 
 // ---------- Persistent live audio player ----------
-var STREAM_URL = 'https://sunny-radio-server.cloud-ip.cc/radio/spiritfm';
+var STREAM_URL = 'https://stream.sunnygh.com/spiritfm';
 
 function siteAudioEl() {
   return document.getElementById('site-audio');
