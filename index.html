@@ -28,7 +28,7 @@
   <div class="wrap">
     <button class="spb-btn" data-role="site-play-toggle" aria-label="Play/Pause live stream">▶</button>
     <div class="spb-info">
-      <span class="spb-title">Spirit FM 96.6</span>
+      <span class="spb-title" data-role="site-station-name">Spirit FM</span>
       <span class="spb-status" data-role="site-play-status">Tap to listen live</span>
     </div>
     <span class="spb-live-dot" data-role="site-live-dot"></span>
@@ -80,10 +80,19 @@
         <span>Mpigi</span><span>Nakasongola</span><span>Mityana</span><span>Mubende</span><span>Kiboga</span>
       </div>
     </div>
-    <div style="background:var(--navy);border-radius:20px;padding:36px;color:var(--cream);text-align:center;">
-      <p style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:18px;">Livestream Player</p>
-      <button data-role="site-play-toggle" style="width:76px;height:76px;border-radius:50%;background:var(--amber);border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:var(--navy);">▶</button>
-      <p data-role="site-play-status" style="margin-top:16px;font-size:13.5px;color:rgba(255,255,255,.6);">Tap to listen live</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="background:var(--navy);border-radius:20px;padding:28px 20px;color:var(--cream);text-align:center;">
+        <p style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:14px;">Spirit FM</p>
+        <button data-role="site-play-toggle" data-station="kampala" style="width:64px;height:64px;border-radius:50%;background:var(--amber);border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:24px;color:var(--navy);">▶</button>
+        <p style="margin-top:14px;font-weight:700;font-size:15px;">96.6 FM Kampala</p>
+        <p data-role="site-play-status" data-station="kampala" style="margin-top:6px;font-size:12.5px;color:rgba(255,255,255,.6);">Tap to listen live</p>
+      </div>
+      <div style="background:var(--navy);border-radius:20px;padding:28px 20px;color:var(--cream);text-align:center;">
+        <p style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:14px;">Spirit FM</p>
+        <button data-role="site-play-toggle" data-station="koboko" style="width:64px;height:64px;border-radius:50%;background:var(--amber);border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:24px;color:var(--navy);">▶</button>
+        <p style="margin-top:14px;font-weight:700;font-size:15px;">104.5 FM Koboko</p>
+        <p data-role="site-play-status" data-station="koboko" style="margin-top:6px;font-size:12.5px;color:rgba(255,255,255,.6);">Tap to listen live</p>
+      </div>
     </div>
   </div>
 </section>

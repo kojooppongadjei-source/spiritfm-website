@@ -15,47 +15,74 @@ function initMobileMenu() {
   });
 }
 
-// ---------- Persistent live audio player ----------
-var STREAM_URL = 'https://stream.sunnygh.com/spiritfm';
+// ---------- Persistent live audio player (multi-station) ----------
+var STATIONS = {
+  kampala: { url: 'https://stream.sunnygh.com/spiritfm', label: '96.6 FM Kampala' },
+  koboko: { url: 'https://stream.sunnygh.com/spirit1045', label: '104.5 FM Koboko' }
+};
+var DEFAULT_STATION = 'kampala';
+var currentStation = DEFAULT_STATION;
 
 function siteAudioEl() {
   return document.getElementById('site-audio');
 }
 
-function updatePlayerUI(playing, statusText) {
+function updatePlayerUI(playing, statusText, stationKey) {
   document.querySelectorAll('[data-role="site-play-toggle"]').forEach(function (btn) {
-    btn.textContent = playing ? '❚❚' : '▶';
+    var btnStation = btn.getAttribute('data-station');
+    var isActiveBtn = !btnStation || btnStation === (stationKey || currentStation);
+    btn.textContent = (playing && isActiveBtn) ? '❚❚' : '▶';
+    btn.classList.toggle('is-playing', playing && isActiveBtn);
   });
   document.querySelectorAll('[data-role="site-play-status"]').forEach(function (el) {
-    el.textContent = statusText;
+    var elStation = el.getAttribute('data-station');
+    if (!elStation) {
+      // Global/mini player bar status — always reflects current station
+      el.textContent = statusText;
+    } else if (elStation === (stationKey || currentStation)) {
+      el.textContent = statusText;
+    } else {
+      el.textContent = 'Tap to listen live';
+    }
   });
   document.querySelectorAll('[data-role="site-live-dot"]').forEach(function (dot) {
     dot.classList.toggle('on', playing);
   });
+  document.querySelectorAll('[data-role="site-station-name"]').forEach(function (el) {
+    el.textContent = STATIONS[stationKey || currentStation].label;
+  });
 }
 
-function toggleSitePlayback() {
+function toggleSitePlayback(stationKey) {
   var audio = siteAudioEl();
   if (!audio) return;
-  if (audio.paused) {
-    if (!audio.src) audio.src = STREAM_URL;
-    updatePlayerUI(false, 'Connecting…');
-    audio.play().then(function () {
-      updatePlayerUI(true, 'Live now — 96.6 FM');
-    }).catch(function () {
-      updatePlayerUI(false, 'Could not connect. Try again.');
-    });
-  } else {
+  stationKey = stationKey || currentStation || DEFAULT_STATION;
+  var station = STATIONS[stationKey] || STATIONS[DEFAULT_STATION];
+
+  var switchingStation = stationKey !== currentStation;
+
+  if (!audio.paused && !switchingStation) {
     audio.pause();
-    updatePlayerUI(false, 'Tap to listen live');
+    updatePlayerUI(false, 'Tap to listen live', stationKey);
+    return;
   }
+
+  currentStation = stationKey;
+  audio.pause();
+  audio.src = station.url;
+  updatePlayerUI(false, 'Connecting…', stationKey);
+  audio.play().then(function () {
+    updatePlayerUI(true, 'Live now — ' + station.label, stationKey);
+  }).catch(function () {
+    updatePlayerUI(false, 'Could not connect. Try again.', stationKey);
+  });
 }
 
 document.addEventListener('click', function (e) {
   var btn = e.target.closest('[data-role="site-play-toggle"]');
   if (btn) {
     e.preventDefault();
-    toggleSitePlayback();
+    toggleSitePlayback(btn.getAttribute('data-station'));
   }
 });
 
