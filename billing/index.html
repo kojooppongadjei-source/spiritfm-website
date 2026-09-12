@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Streaming Billing — Spirit FM Network</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<style>
+  :root {
+    --navy: #0A0A0A;
+    --cream: #FFFFFF;
+    --amber: #FF00C6;
+    --muted: #6b6b70;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'General Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    padding: 40px 20px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  p.lead { color: var(--muted); margin-bottom: 32px; }
+  .station-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .station-name { font-weight: 700; font-size: 16px; }
+  .station-amount { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  .badge.active { background: #e7f8ee; color: #1a7f45; }
+  .badge.past_due { background: #fff4e5; color: #b96500; }
+  .badge.cancelled, .badge.unpaid { background: #fde8f3; color: var(--amber); }
+  .btn {
+    background: var(--amber);
+    color: #fff;
+    border: 0;
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn:disabled { opacity: .5; cursor: default; }
+  #status-msg { margin-top: 20px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Streaming Hosting — Monthly Billing</h1>
+  <p class="lead">$25/month per station · covers live-stream hosting on the Apt International streaming infrastructure.</p>
+  <div id="stations-list">Loading…</div>
+  <div id="status-msg"></div>
+</div>
+
+<script>
+  // Public key is safe to expose client-side. Replace with your real Paystack public key.
+  var PAYSTACK_PUBLIC_KEY = 'pk_live_REPLACE_WITH_REAL_KEY';
+  var EMAIL_BY_STATION = {
+    sunnyfm: 'sunnyfm@gmail.com',
+    spirit883: 'info@spiritgh.com',
+    spirit966: 'info@spiritfm966.com',
+    spirit1045: 'info@spiritfm966.com'
+  };
+
+  function badgeLabel(status) {
+    return { active: 'Active', past_due: 'Payment Due', cancelled: 'Cancelled', unpaid: 'Not Started' }[status] || status;
+  }
+
+  function renderStations(stations) {
+    var list = document.getElementById('stations-list');
+    list.innerHTML = '';
+    stations.forEach(function (s) {
+      var card = document.createElement('div');
+      card.className = 'station-card';
+
+      var subscribeBtn = (s.status === 'active')
+        ? ''
+        : '<button class="btn" data-station="' + s.station_key + '" data-amount="' + Math.round(s.amount_usd * 100) + '">Subscribe — $' + s.amount_usd + '/mo</button>';
+
+      card.innerHTML =
+        '<div>' +
+          '<div class="station-name">' + s.station_name + '</div>' +
+          '<div class="station-amount">$' + s.amount_usd + '/month' + (s.next_billing_at ? ' · next charge ' + new Date(s.next_billing_at).toLocaleDateString() : '') + '</div>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:14px;">' +
+          '<span class="badge ' + s.status + '">' + badgeLabel(s.status) + '</span>' +
+          subscribeBtn +
+        '</div>';
+      list.appendChild(card);
+    });
+
+    list.querySelectorAll('button[data-station]').forEach(function (btn) {
+      btn.onclick = function () { startSubscription(btn.getAttribute('data-station'), parseInt(btn.getAttribute('data-amount'), 10)); };
+    });
+  }
+
+  function loadStations() {
+    fetch('/.netlify/functions/get-subscriptions')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { renderStations(data.stations); })
+      .catch(function () { document.getElementById('stations-list').textContent = 'Could not load billing status.'; });
+  }
+
+  function startSubscription(stationKey, amountCents) {
+    var email = EMAIL_BY_STATION[stationKey] || window.prompt('Billing email for this station:');
+    if (!email) return;
+
+    var handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: email,
+      amount: amountCents,
+      currency: 'USD',
+      metadata: { station_key: stationKey },
+      callback: function (response) {
+        document.getElementById('status-msg').textContent = 'Payment received — setting up the monthly subscription…';
+        fetch('/.netlify/functions/create-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reference: response.reference, station_key: stationKey })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (result) {
+          if (result.success) {
+            document.getElementById('status-msg').textContent = 'Subscribed — $25/month will now renew automatically.';
+            loadStations();
+          } else {
+            document.getElementById('status-msg').textContent = 'Payment succeeded but subscription setup failed: ' + (result.error || 'unknown error') + '. Contact support.';
+          }
+        });
+      },
+      onClose: function () {
+        document.getElementById('status-msg').textContent = 'Payment window closed.';
+      }
+    });
+    handler.openIframe();
+  }
+
+  loadStations();
+</script>
+</body>
+</html>
