@@ -5,8 +5,8 @@ backend:
 media_folder: "assets/images/uploads"
 public_folder: "/assets/images/uploads"
 
-site_url: https://monumental-tanuki-b9895d.netlify.app
-display_url: https://monumental-tanuki-b9895d.netlify.app
+site_url: https://spiritfm.co.ug
+display_url: https://spiritfm.co.ug
 
 collections:
   - name: "news"
